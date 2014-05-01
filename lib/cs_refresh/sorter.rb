@@ -58,7 +58,7 @@ module CsRefresh
 
     def push(item)
       @heap_arr << item
-      promote(@heap_arr.size - 1)
+      promote(last_position)
     end
 
     def empty?
@@ -67,20 +67,68 @@ module CsRefresh
 
     def pop_min
       min = @heap_arr[0]
+      last = @heap_arr[last_position]
       # reduce array size by one
-      push_to_end(0)
-      @heap_arr.slice!(@heap_arr.length - 1)
+      @heap_arr.slice!(last_position)
+      if @heap_arr.size > 0
+        @heap_arr[0] = last
+        push_down(0)
+      end
       min
     end
 
     private
 
+    def last_position
+      @heap_arr.length - 1
+    end
+
+    def push_down(position)
+      if right_child?(position) && left_child?(position)
+        push_down_has_both_children(position)
+      elsif right_child?(position)
+        push_down_to_right(position)
+      elsif left_child?(position)
+        push_down_to_left(position)
+      else
+        # do nothing - we are at bottom
+      end
+    end
+
+    def push_down_to_left(position)
+      left = @heap_arr[left_child_position(position)]
+      element = @heap_arr[position]
+      if element > left
+        swap(position, left_child_position(position))
+        push_down(left_child_position(position))
+      end
+    end
+
+    def push_down_to_right(position)
+      right = @heap_arr[right_child_position(position)]
+      element = @heap_arr[position]
+      if element > right
+        swap(position, right_child_position(position))
+        push_down(right_child_position(position))
+      end
+    end
+
+    def push_down_has_both_children(position)
+      right = @heap_arr[right_child_position(position)]
+      left = @heap_arr[left_child_position(position)]
+      if right > left
+        push_down_to_left(position)
+      else
+        push_down_to_right(position)
+      end
+    end
+
     def push_to_end(position)
       unless position == @heap_arr.length - 1
         if right_child?(position)
-          swap(position, right_child(position))
+          swap(position, right_child_position(position))
         elsif left_child?(position)
-          swap(position, left_child(position))
+          swap(position, left_child_position(position))
         else
           fail "No right or left child for #{position} in arr of #{@heap_arr}"
         end
@@ -94,11 +142,11 @@ module CsRefresh
     end
 
     def right_child?(position)
-      right_child(position) < @heap_arr.length
+      right_child_position(position) < @heap_arr.length
     end
 
     def left_child?(position)
-      left_child(position) < @heap_arr.length
+      left_child_position(position) < @heap_arr.length
     end
 
     def promote(position)
@@ -115,11 +163,11 @@ module CsRefresh
       (position / 2).to_i
     end
 
-    def right_child(position)
+    def right_child_position(position)
       position + 2
     end
 
-    def left_child(position)
+    def left_child_position(position)
       position + 1
     end
 
@@ -137,10 +185,7 @@ module CsRefresh
     def sort(arr)
       @heap.push_all(arr)
       new_arr = []
-      until @heap.empty?
-        puts "Heap is now #{@heap}"
-        new_arr << @heap.pop_min
-      end
+      new_arr << @heap.pop_min until @heap.empty?
       new_arr
     end
   end
