@@ -176,8 +176,8 @@ module CsRefresh
     end
   end
 
-  # Uses MergeSort algorithm
-  class MergeSorter
+  # Uses HeapSort algorithm
+  class HeapSorter
     def initialize(heap)
       @heap = heap
     end

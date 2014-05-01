@@ -18,8 +18,8 @@ end
 
 [CsRefresh::SystemSorter.new,
  CsRefresh::QuickSorter.new,
- CsRefresh::MergeSorter.new(CsRefresh::SystemMinHeap.new),
- CsRefresh::MergeSorter.new(CsRefresh::VinceMinHeap.new),
+ CsRefresh::HeapSorter.new(CsRefresh::SystemMinHeap.new),
+ CsRefresh::HeapSorter.new(CsRefresh::VinceMinHeap.new),
 ].each do |sorter|
   test(sorter)
 end
