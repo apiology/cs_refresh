@@ -189,4 +189,38 @@ module CsRefresh
       new_arr
     end
   end
+
+  # Quicksort implementation
+  class QuickSorter
+    def sort(arr)
+      quicksort(arr, 0, arr.length - 1)
+    end
+
+    private
+
+    def quicksort(arr, first_idx, last_idx)
+      unless first_idx >= last_idx
+        pivot_idx = partition(arr, first_idx, last_idx)
+        quicksort(arr, first_idx, pivot_idx)
+        quicksort(arr, pivot_idx + 1, last_idx)
+      end
+      arr
+    end
+
+    def partition(arr, first_idx, last_idx)
+      pivot_value = arr[first_idx]
+      while first_idx < last_idx
+        first_idx += 1 while arr[first_idx] < pivot_value
+        last_idx -= 1 while arr[last_idx] > pivot_value
+        swap(arr, first_idx, last_idx) if first_idx < last_idx
+      end
+      last_idx
+    end
+
+    def swap(arr, a, b)
+      tmp = arr[a]
+      arr[a] = arr[b]
+      arr[b] = tmp
+    end
+  end
 end
