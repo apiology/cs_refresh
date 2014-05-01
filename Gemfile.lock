@@ -1,6 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    algorithms (0.6.1)
     ast (2.0.0)
     cane (2.6.2)
       parallel
@@ -63,6 +64,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  algorithms
   bundler
   quality
   rake
