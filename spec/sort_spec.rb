@@ -20,6 +20,7 @@ end
  CsRefresh::QuickSorter.new,
  CsRefresh::HeapSorter.new(CsRefresh::SystemMinHeap.new),
  CsRefresh::HeapSorter.new(CsRefresh::VinceMinHeap.new),
+ CsRefresh::MergeSorter.new,
 ].each do |sorter|
   test(sorter)
 end

@@ -223,4 +223,92 @@ module CsRefresh
       arr[b] = tmp
     end
   end
+
+  # Implementation of mergesort algorithm
+  class MergeSorter
+    def sort(arr)
+      if arr.length == 1
+        arr
+      else
+        left_side, right_side = split_and_sort_each(arr)
+        left_side = sort(left_side)
+        right_side = sort(right_side)
+        merge(left_side, right_side)
+      end
+    end
+
+    private
+
+    def split_and_sort_each(arr)
+      middle_idx = ((arr.length - 1) / 2).to_i
+      split_on_index(arr, middle_idx)
+    end
+
+    def split_on_index(arr, index)
+      [arr[0..index], arr[index + 1..(arr.length - 1)]]
+    end
+
+    def merge(arr1, arr2)
+      Merger.new(arr1, arr2).merged
+    end
+  end
+
+  # Iterates through an array until done
+  class ArrIterator
+    attr_reader :idx
+    attr_reader :arr
+
+    def initialize(arr)
+      @arr = arr
+      @idx = 0
+    end
+
+    def done?
+      idx >= arr.length
+    end
+
+    def next
+      ret = value
+      @idx += 1
+      ret
+    end
+
+    def value
+      @arr[@idx]
+    end
+  end
+
+  # Merges two pre-sorted arrays
+  class Merger
+    attr_reader :arr1
+    attr_reader :arr2
+
+    def initialize(arr1, arr2)
+      @arr1 = ArrIterator.new(arr1)
+      @arr2 = ArrIterator.new(arr2)
+      @new_arr = []
+    end
+
+    def compare_and_merge
+      unless arr1.done? || arr2.done?
+        if arr1.value < arr2.value
+          @new_arr << arr1.next
+        else
+          @new_arr << arr2.next
+        end
+      end
+    end
+
+    def concat(arr)
+      @new_arr << arr.next until arr.done?
+    end
+
+    def merged
+      compare_and_merge
+      # handle left-overs
+      concat(arr1)
+      concat(arr2)
+      @new_arr
+    end
+  end
 end
