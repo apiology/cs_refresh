@@ -19,19 +19,38 @@ SAMPLE_DFS_POST_ORDER = [19, 12, 62, 91, 23, 52, 8, 9]
 
 SAMPLE_BFS = [9, 12, 8, 19, 23, 52, 62, 91]
 
-def test_traversals(tree)
+def test_pre_order(tree)
   it "Should do DFS pre-order traversal of #{tree}" do
     expect(tree.dfs_pre_order).to eq SAMPLE_DFS_PRE_ORDER
+    expect(tree.dfs_pre_order_iterative).to eq SAMPLE_DFS_PRE_ORDER
   end
-  it "Should do DFS in-order traversal of #{tree}" do
-    expect(tree.dfs_in_order).to eq SAMPLE_DFS_IN_ORDER
-  end
+end
+
+def test_post_order(tree)
   it "Should do DFS post-order traversal of #{tree}" do
     expect(tree.dfs_post_order).to eq SAMPLE_DFS_POST_ORDER
+#    expect(tree.dfs_post_order_iterative).to eq SAMPLE_DFS_POST_ORDER
   end
+end
+
+def test_in_order(tree)
+  it "Should do DFS in-order traversal of #{tree}" do
+    expect(tree.dfs_in_order).to eq SAMPLE_DFS_IN_ORDER
+    expect(tree.dfs_in_order_iterative).to eq SAMPLE_DFS_IN_ORDER
+  end
+end
+
+def test_bfs(tree)
   it "Should do BFS traversal of #{tree}" do
     expect(tree.bfs).to eq SAMPLE_BFS
   end
+end
+
+def test_traversals(tree)
+  test_pre_order(tree)
+  test_post_order(tree)
+  test_in_order(tree)
+  test_bfs(tree)
 end
 
 def test(binary_tree_class)

@@ -18,6 +18,41 @@ module CsRefresh
       out
     end
 
+    def dfs_pre_order_iterative
+      out = []
+      work = [self]
+
+      until work.empty?
+        node = work.pop
+        out << node.element
+        work.push node.right unless node.right.nil?
+        work.push node.left unless node.left.nil?
+      end
+
+      out
+    end
+
+    def dfs_in_order_iterative
+      current = self
+      visit_self_then_right = []
+      out = []
+      while current || !visit_self_then_right.empty?
+        if current
+          visit_self_then_right.push current
+          if current.left.nil?
+            current = nil
+          else
+            current = current.left
+          end
+        else
+          e = visit_self_then_right.pop
+          out << e.element
+          current = e.right
+        end
+      end
+      out
+    end
+
     def dfs_in_order
       out = []
       out.concat left.dfs_in_order unless left.nil?
