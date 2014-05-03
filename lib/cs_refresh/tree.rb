@@ -33,24 +33,44 @@ module CsRefresh
     end
 
     def dfs_in_order_iterative
-      current = self
-      visit_self_then_right = []
-      out = []
-      while current || !visit_self_then_right.empty?
-        if current
-          visit_self_then_right.push current
-          if current.left.nil?
-            current = nil
-          else
-            current = current.left
-          end
+      InOrderTreeIterator.new(self).out
+    end
+
+    # Iterate through a Tree in-order.
+    class InOrderTreeIterator
+      attr_reader :out
+
+      def initialize(current_)
+        @current = current_
+        @visit_self_then_right = []
+        @out = []
+        iterate!
+      end
+
+      def visit_current
+        @visit_self_then_right.push @current
+        if @current.left.nil?
+          @current = nil
         else
-          e = visit_self_then_right.pop
-          out << e.element
-          current = e.right
+          @current = @current.left
         end
       end
-      out
+
+      def visit_next
+        e = @visit_self_then_right.pop
+        @out << e.element
+        @current = e.right
+      end
+
+      def iterate!
+        while @current || !@visit_self_then_right.empty?
+          if @current
+            visit_current
+          else
+            visit_next
+          end
+        end
+      end
     end
 
     def dfs_in_order
