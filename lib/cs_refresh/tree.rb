@@ -32,6 +32,58 @@ module CsRefresh
       out
     end
 
+    # State of graph visiting
+    class VisitState
+      attr_accessor :visited_left, :visited_right, :node
+
+      def initialize(node)
+        @node = node
+      end
+    end
+
+    def dfs_post_order_iterative
+      PostOrderTreeIterator.new(self).out
+    end
+
+    # Iterates through trees in a post-order fashion without recursion.
+    class PostOrderTreeIterator
+      attr_reader :out
+
+      def initialize(node)
+        @current = VisitState.new(node)
+        @visit_next = []
+        @out = []
+        iterate! until @current.nil?
+      end
+
+      def iterate!
+        if @current.node.left && !@current.visited_left
+          iterate_left!
+        elsif @current.node.right && !@current.visited_right
+          iterate_right!
+        else
+          iterate_up!
+        end
+      end
+
+      def iterate_left!
+        @current.visited_left = true
+        @visit_next.push(@current)
+        @current = VisitState.new(@current.node.left)
+      end
+
+      def iterate_right!
+        @current.visited_right = true
+        @visit_next.push(@current)
+        @current = VisitState.new(@current.node.right)
+      end
+
+      def iterate_up!
+        @out << @current.node.element
+        @current = @visit_next.pop
+      end
+    end
+
     def dfs_in_order_iterative
       InOrderTreeIterator.new(self).out
     end

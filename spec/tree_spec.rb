@@ -29,7 +29,7 @@ end
 def test_post_order(tree)
   it "Should do DFS post-order traversal of #{tree}" do
     expect(tree.dfs_post_order).to eq SAMPLE_DFS_POST_ORDER
-#    expect(tree.dfs_post_order_iterative).to eq SAMPLE_DFS_POST_ORDER
+    expect(tree.dfs_post_order_iterative).to eq SAMPLE_DFS_POST_ORDER
   end
 end
 
