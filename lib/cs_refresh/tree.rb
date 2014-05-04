@@ -2,12 +2,33 @@
 module CsRefresh
   # My implementation of a binary tree with various traversals.
   class BinaryTree
-    attr_reader :element, :left, :right
+    attr_accessor :element, :left, :right
 
     def initialize(element, left = nil, right = nil)
       @element = element
       @left = left
       @right = right
+    end
+
+    def left_to_str(num_indents)
+      left_str = ''
+      left_str = left.to_s(num_indents + 2) unless left.nil?
+      left_str
+    end
+
+    def right_to_str(num_indents)
+      right_str = ''
+      right_str = right.to_s(num_indents + 2) unless right.nil?
+      right_str
+    end
+
+    def to_s(num_indents = 0)
+      left_str = left_to_str(num_indents)
+      spaces = ''
+      num_indents.times { spaces += ' ' }
+      ele_str = "#{spaces}#{element}\n"
+      right_str = right_to_str(num_indents)
+      "#{right_str}#{ele_str}#{left_str}"
     end
 
     def dfs_pre_order
