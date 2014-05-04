@@ -3,6 +3,14 @@ require_relative 'tree'
 module CsRefresh
   # My implementation of a binary search tree
   class BinarySearchTree
+    def sorted_list
+      if @tree.nil?
+        []
+      else
+        @tree.dfs_in_order_iterative
+      end
+    end
+
     def insert_value(value)
       if @tree.nil?
         @tree = BinaryTree.new(value)
