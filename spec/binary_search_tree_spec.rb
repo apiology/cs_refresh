@@ -16,18 +16,34 @@ def insert_test_values(tree)
   end
 end
 
-def test_finding(tree)
+def test_finding_recursive(tree)
   NUMBERS.each do |num|
-    it "Should be able to find value #{num}" do
+    it "Should be able to find value #{num} recursively" do
       expect(tree.value?(num)).to be true
     end
   end
 end
 
-def test_not_finding(tree)
+def test_not_finding_recursive(tree)
   OTHER_NUMBERS.each do |num|
-    it "Should not find value #{num}" do
+    it "Should not find value #{num} recursively" do
       expect(tree.value?(num)).to be false
+    end
+  end
+end
+
+def test_finding_iterative(tree)
+  NUMBERS.each do |num|
+    it "Should be able to find value #{num} iteratively" do
+      expect(tree.value_iterative?(num)).to be true
+    end
+  end
+end
+
+def test_not_finding_iterative(tree)
+  OTHER_NUMBERS.each do |num|
+    it "Should not find value #{num} iteratively" do
+      expect(tree.value_iterative?(num)).to be false
     end
   end
 end
@@ -42,8 +58,10 @@ def test(binary_search_tree_class)
   describe binary_search_tree_class do
     my_tree = binary_search_tree_class.new
     insert_test_values(my_tree)
-    test_finding(my_tree)
-    test_not_finding(my_tree)
+    test_finding_recursive(my_tree)
+    test_not_finding_recursive(my_tree)
+    test_finding_iterative(my_tree)
+    test_not_finding_iterative(my_tree)
     test_sorted(my_tree)
   end
 end

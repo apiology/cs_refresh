@@ -43,6 +43,15 @@ module CsRefresh
       end
     end
 
+    def value_iterative?(value)
+      tree = @tree
+      until tree.nil?
+        return true if tree.element == value
+        tree = value < tree.element ? tree.left : tree.right
+      end
+      false
+    end
+
     def value?(value, tree = @tree)
       if tree.nil?
         false
