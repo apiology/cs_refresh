@@ -57,7 +57,6 @@ end
 def create_simple_tree(binary_search_tree_class, values)
   tree = binary_search_tree_class.new
   values.each { |val| tree.insert_value(val) }
-  values.each { |val| expect(tree.value?(val)).to be true }
   tree
 end
 
@@ -65,12 +64,30 @@ def test_deletes_work(binary_search_tree_class)
   it "Should allow a value to be deleted" do
     values = [5, 2, 3]
     tree = create_simple_tree(binary_search_tree_class, values)
+    test_tree_contains(tree, values)
     tree.delete!(3)
     expect(tree.value?(5)).to be true
     expect(tree.value?(2)).to be true
     expect(tree.value?(3)).to be false
   end
 end
+
+def test_tree_contains(tree, values)
+  values.each { |val| expect(tree.value?(val)).to be true }
+end
+
+def test_rotations_work(binary_search_tree_class)
+  it "Should allow a tree to be rotated" do
+    values = [5, 2, 3, 29, 33, 92, 2, 52, 12]
+    tree = create_simple_tree(binary_search_tree_class, values)
+    # puts "After insert, tree is\n#{tree}"
+    test_tree_contains(tree, values)
+    tree.left_rotate!(29)
+    # puts "After left_rotate on 29, tree is\n#{tree}"
+    test_tree_contains(tree, values)
+  end
+end
+
 
 def test(binary_search_tree_class)
   describe binary_search_tree_class do
@@ -85,6 +102,7 @@ def test(binary_search_tree_class)
     end
     describe "With scratch tree" do
       test_deletes_work(binary_search_tree_class)
+      test_rotations_work(binary_search_tree_class)
     end
   end
 end

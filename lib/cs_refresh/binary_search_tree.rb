@@ -52,21 +52,24 @@ module CsRefresh
       false
     end
 
-    def value?(value, tree = @tree)
-      if tree.nil?
-        false
-      else
-        value_in_real_tree?(value, tree)
-      end
+    def value?(value)
+      find_tree(value) != nil
     end
 
-    def value_in_real_tree?(value, tree)
-      if value == tree.element
-        true
+    def find_tree(value)
+      tree, _parent = find_tree_and_parent(value)
+      tree
+    end
+
+    def find_tree_and_parent(value, tree = @tree, parent = nil)
+      if tree.nil?
+        nil
+      elsif value == tree.element
+        [tree, parent]
       elsif value < tree.element
-        value?(value, tree.left)
+        find_tree_and_parent(value, tree.left, tree)
       else # value > tree.element
-        value?(value, tree.right)
+        find_tree_and_parent(value, tree.right, tree)
       end
     end
 
@@ -80,6 +83,12 @@ module CsRefresh
       end
     end
 
+    def left_rotate!(value)
+      tree, parent = find_tree_and_parent(value)
+      fail if tree.nil?
+      tree.left_rotate!(parent)
+    end
+
     def remove_from_parent(tree, parent)
       if tree == @tree
         @tree = nil
@@ -91,22 +100,14 @@ module CsRefresh
     def remove_from_nonnil_parent(tree, parent)
       # parent must be set
       if tree.left
-        replace(parent, tree, tree.left)
+        parent.replace(tree, tree.left)
         tree.left = nil
       elsif tree.right
-        replace(parent, tree, tree.right)
+        parent.replace(tree, tree.right)
         tree.right = nil
       else
-        replace(parent, tree, nil)
+        parent.replace(tree, nil)
         tree.right = nil
-      end
-    end
-
-    def replace(parent, tree, new_tree)
-      if parent.left == tree
-        parent.left = new_tree
-      else
-        parent.right = new_tree
       end
     end
 

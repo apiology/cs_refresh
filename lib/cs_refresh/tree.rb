@@ -31,6 +31,22 @@ module CsRefresh
       "#{right_str}#{ele_str}#{left_str}"
     end
 
+    def left_rotate!(parent)
+      old_right = right
+      old_right_left = right.left
+      parent.replace(self, right)
+      old_right.left = self
+      self.right = old_right_left
+    end
+
+    def replace(tree, new_tree)
+      if @left == tree
+        @left = new_tree
+      else
+        @right = new_tree
+      end
+    end
+
     def dfs_pre_order
       out = []
       out << element
