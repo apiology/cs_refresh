@@ -85,6 +85,9 @@ def test_rotations_work(binary_search_tree_class)
     tree.left_rotate!(29)
     # puts "After left_rotate on 29, tree is\n#{tree}"
     test_tree_contains(tree, values)
+    tree.right_rotate!(33)
+    # puts "After right_rotate on 33, tree is\n#{tree}"
+    test_tree_contains(tree, values)
   end
 end
 

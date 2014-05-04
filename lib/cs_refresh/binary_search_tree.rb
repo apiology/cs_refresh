@@ -57,13 +57,12 @@ module CsRefresh
     end
 
     def find_tree(value)
-      tree, _parent = find_tree_and_parent(value)
-      tree
+      find_tree_and_parent(value)[0]
     end
 
     def find_tree_and_parent(value, tree = @tree, parent = nil)
       if tree.nil?
-        nil
+        [nil, nil]
       elsif value == tree.element
         [tree, parent]
       elsif value < tree.element
@@ -85,8 +84,12 @@ module CsRefresh
 
     def left_rotate!(value)
       tree, parent = find_tree_and_parent(value)
-      fail if tree.nil?
       tree.left_rotate!(parent)
+    end
+
+    def right_rotate!(value)
+      tree, parent = find_tree_and_parent(value)
+      tree.right_rotate!(parent)
     end
 
     def remove_from_parent(tree, parent)

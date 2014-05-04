@@ -36,7 +36,15 @@ module CsRefresh
       old_right_left = right.left
       parent.replace(self, right)
       old_right.left = self
-      self.right = old_right_left
+      @right = old_right_left
+    end
+
+    def right_rotate!(parent)
+      old_left = left
+      old_left_right = left.right
+      parent.replace(self, left)
+      old_left.right = self
+      @left = old_left_right
     end
 
     def replace(tree, new_tree)
