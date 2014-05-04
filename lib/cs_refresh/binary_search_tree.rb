@@ -70,6 +70,46 @@ module CsRefresh
       end
     end
 
+    def delete!(value, tree = @tree, parent = nil)
+      if value == tree.element
+        remove_from_parent(tree, parent)
+      elsif value < tree.element
+        delete!(value, tree.left, tree)
+      else
+        delete!(value, tree.right, tree)
+      end
+    end
+
+    def remove_from_parent(tree, parent)
+      if tree == @tree
+        @tree = nil
+      else
+        remove_from_nonnil_parent(tree, parent)
+      end
+    end
+
+    def remove_from_nonnil_parent(tree, parent)
+      # parent must be set
+      if tree.left
+        replace(parent, tree, tree.left)
+        tree.left = nil
+      elsif tree.right
+        replace(parent, tree, tree.right)
+        tree.right = nil
+      else
+        replace(parent, tree, nil)
+        tree.right = nil
+      end
+    end
+
+    def replace(parent, tree, new_tree)
+      if parent.left == tree
+        parent.left = new_tree
+      else
+        parent.right = new_tree
+      end
+    end
+
     def to_s
       @tree.to_s
     end

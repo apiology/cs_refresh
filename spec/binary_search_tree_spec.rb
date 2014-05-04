@@ -54,15 +54,38 @@ def test_sorted(tree)
   end
 end
 
+def create_simple_tree(binary_search_tree_class, values)
+  tree = binary_search_tree_class.new
+  values.each { |val| tree.insert_value(val) }
+  values.each { |val| expect(tree.value?(val)).to be true }
+  tree
+end
+
+def test_deletes_work(binary_search_tree_class)
+  it "Should allow a value to be deleted" do
+    values = [5, 2, 3]
+    tree = create_simple_tree(binary_search_tree_class, values)
+    tree.delete!(3)
+    expect(tree.value?(5)).to be true
+    expect(tree.value?(2)).to be true
+    expect(tree.value?(3)).to be false
+  end
+end
+
 def test(binary_search_tree_class)
   describe binary_search_tree_class do
-    my_tree = binary_search_tree_class.new
-    insert_test_values(my_tree)
-    test_finding_recursive(my_tree)
-    test_not_finding_recursive(my_tree)
-    test_finding_iterative(my_tree)
-    test_not_finding_iterative(my_tree)
-    test_sorted(my_tree)
+    describe "with test tree" do
+      my_tree = binary_search_tree_class.new
+      insert_test_values(my_tree)
+      test_finding_recursive(my_tree)
+      test_not_finding_recursive(my_tree)
+      test_finding_iterative(my_tree)
+      test_not_finding_iterative(my_tree)
+      test_sorted(my_tree)
+    end
+    describe "With scratch tree" do
+      test_deletes_work(binary_search_tree_class)
+    end
   end
 end
 
