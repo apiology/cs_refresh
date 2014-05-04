@@ -118,4 +118,54 @@ module CsRefresh
       @tree.to_s
     end
   end
+
+  # Red-Black balanced binary search tree
+  class RedBlackTree
+    # Annotate a value with a color
+    class RedBlackValue
+      attr_reader :value
+      attr_accessor :color
+
+      def initialize(color, value)
+        @color = color
+        @value = value
+      end
+
+      def <=>(other)
+        value <=> other.value
+      end
+
+      def <(other)
+        value < other.value
+      end
+
+      def ==(other)
+        value == other.value
+      end
+    end
+
+    def initialize
+      @bst = BinarySearchTree.new
+    end
+
+    def insert_value(value)
+      @bst.insert_value(RedBlackValue.new(:red, value))
+    end
+
+    def value?(value)
+      @bst.value?(RedBlackValue.new(:dontcare, value))
+    end
+
+    def value_iterative?(value)
+      @bst.value_iterative?(RedBlackValue.new(:dontcare, value))
+    end
+
+    def delete!(value)
+      @bst.delete!(RedBlackValue.new(:dontcare, value))
+    end
+
+    def sorted_list
+      @bst.sorted_list.map(&:value)
+    end
+  end
 end

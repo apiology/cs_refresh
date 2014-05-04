@@ -105,12 +105,24 @@ def test(binary_search_tree_class)
     end
     describe "With scratch tree" do
       test_deletes_work(binary_search_tree_class)
+    end
+  end
+end
+
+def test_raw_tree(binary_search_tree_class)
+  describe binary_search_tree_class do
+    describe "With scratch tree" do
       test_rotations_work(binary_search_tree_class)
     end
   end
 end
 
 # NEXT: Array-based tree storage?
-[CsRefresh::BinarySearchTree].each do |binary_search_tree_class|
+[CsRefresh::BinarySearchTree,
+ CsRefresh::RedBlackTree].each do |binary_search_tree_class|
   test(binary_search_tree_class)
+end
+
+[CsRefresh::BinarySearchTree].each do |binary_search_tree_class|
+  test_raw_tree(binary_search_tree_class)
 end
