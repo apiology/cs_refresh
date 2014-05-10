@@ -39,7 +39,6 @@ module CsRefresh
       to_s
     end
 
-
     def calc_max_distances
       # push all of the links from this node
 
