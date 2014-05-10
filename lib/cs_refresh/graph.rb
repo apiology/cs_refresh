@@ -41,20 +41,7 @@ module CsRefresh
       to_s
     end
 
-    class HeapItem
-      attr_reader :node, :prev, :weight
-
-      def initialize(node, prev, weight)
-        @node = node
-        @prev = prev
-        @weight = weight
-      end
-
-      def <(other)
-        weight < other.weight
-      end
-    end
-
+    # Implement's Djikstra's algorithm
     def shortest_paths
       distance = {}
       prev = {}
@@ -77,13 +64,27 @@ module CsRefresh
 
         node.edges.each do |edge|
           unless distance_minimized.include?(edge.target)
-            relax(closest,
-                  edge.target,
-                  distance[node] + edge.weight)
+            if relax(closest, edge.target, distance[node] + edge.weight)
+              prev[edge.target] = node
+            end
           end
         end
       end
-      distance
+      distance.keys.map do |node|
+        [node, [distance[node], format_path(path(prev, node))]]
+      end.to_h
+    end
+
+    def format_path(path)
+      path[1..path.length-2].reverse
+    end
+
+    def path(prev, node)
+      if node.nil?
+        []
+      else
+        [node].concat(path(prev, prev[node]))
+      end
     end
 
     def relax(closest,
@@ -92,6 +93,9 @@ module CsRefresh
       old_distance = closest[node]
       if old_distance.nil? || old_distance > new_distance
         closest[node] = new_distance
+        true
+      else
+        false
       end
     end
 
