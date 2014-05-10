@@ -64,5 +64,32 @@ module CsRefresh
       end
       cost
     end
+
+    def find_nodes_dfs
+      GraphDepthFirstSearch.new(self).all_nodes
+    end
+
+    # Does a DFS on a graph node
+    class GraphDepthFirstSearch
+      attr_reader :all_nodes
+
+      def initialize(root_node)
+        @root_node = root_node
+        @all_nodes = Set.new
+        @color = {}
+        search(root_node)
+      end
+
+      def search(node)
+        node.edges.each do |link|
+          unless @color[link.target]
+            all_nodes << link.target
+            @color[link.target] = :grey
+            search(link.target)
+          end
+        end
+        @color[node] = :black
+      end
+    end
   end
 end

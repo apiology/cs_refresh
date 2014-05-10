@@ -52,6 +52,12 @@ def test_complex_graph(graph_class)
       }
       expect(s.calc_max_distances).to eq max_distances
     end
+
+
+    it "Should do a DFS" do
+      all_nodes = [r, s, t, u, v, w, x, y].to_set
+      expect(s.find_nodes_dfs).to eq all_nodes
+    end
   end
 end
 
