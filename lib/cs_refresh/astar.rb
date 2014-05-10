@@ -6,9 +6,6 @@ module CsRefresh
       @goal = goal
       @remaining_path_estimate = estimates_to_finish
       @distance_from_start = { start => 0 }
-      @estimated_cost_through_this_node = {}
-      @estimated_cost_through_this_node[start] =
-        0 + @remaining_path_estimate[start]
       @closed_set = Set.new
 
       @prev = {}
@@ -16,7 +13,7 @@ module CsRefresh
 
       @closest = PriorityQueue.new
       @closest.push(start,
-                    @estimated_cost_through_this_node[start])
+                    0 + @remaining_path_estimate[start])
 
       astar!
     end
@@ -29,24 +26,28 @@ module CsRefresh
       # Min in priority queue is always the final shortest path for
       # that vertice.
       #
-      until (node, estimated_total_distance = @closest.delete_min).nil?
-        break if explore_node(node, estimated_total_distance)
+      until (node, _ = @closest.delete_min).nil?
+        break if explore_node(node)
       end
     end
 
-    def explore_node(node, estimated_total_distance)
+    def explore_node(node)
       @closed_set.add(node)
       return true if node == @goal
       node.edges.each do |edge|
-        unless @closed_set.include?(edge.target)
-          tentative_distance_from_start =
-            @distance_from_start[node] + edge.weight
-          if relax(edge.target, tentative_distance_from_start)
-            @prev[edge.target] = node
-          end
-        end
+        explore_node_edge(node, edge)
       end
       false # didn't find end
+    end
+
+    def explore_node_edge(node, edge)
+      unless @closed_set.include?(edge.target)
+        tentative_distance_from_start =
+          @distance_from_start[node] + edge.weight
+        if relax(edge.target, tentative_distance_from_start)
+          @prev[edge.target] = node
+        end
+      end
     end
 
     def best_path
@@ -60,7 +61,6 @@ module CsRefresh
         [node].concat(path(@prev[node]))
       end
     end
-
 
     def format_path(path)
       path[1..path.length - 2].reverse
@@ -78,10 +78,8 @@ module CsRefresh
       old_distance = @distance_from_start[node]
       if old_distance.nil? || old_distance > new_distance
         @distance_from_start[node] = new_distance
-        @estimated_cost_through_this_node[node] =
-          @distance_from_start[node] +
+        @closest[node] = @distance_from_start[node] +
           @remaining_path_estimate[node]
-        @closest[node] = @estimated_cost_through_this_node[node]
         true
       else
         false
