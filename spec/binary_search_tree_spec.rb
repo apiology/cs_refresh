@@ -13,6 +13,7 @@ OTHER_NUMBERS = [234234, 29, 1, 23423, 523, 28, 5]
 def insert_test_values(tree)
   NUMBERS.each do |num|
     tree.insert_value(num)
+    fail unless tree.invariants_held?
   end
 end
 
@@ -57,6 +58,7 @@ end
 def create_simple_tree(binary_search_tree_class, values)
   tree = binary_search_tree_class.new
   values.each { |val| tree.insert_value(val) }
+  expect(tree.invariants_held?).to be true
   tree
 end
 
@@ -64,11 +66,14 @@ def test_deletes_work(binary_search_tree_class)
   it "Should allow a value to be deleted" do
     values = [5, 2, 3]
     tree = create_simple_tree(binary_search_tree_class, values)
+    # puts "Simple tree is:\n#{tree}"
     test_tree_contains(tree, values)
     tree.delete!(3)
+    # puts "After deletion of 3:\n#{tree}"
     expect(tree.value?(5)).to be true
     expect(tree.value?(2)).to be true
     expect(tree.value?(3)).to be false
+    expect(tree.invariants_held?).to be true
   end
 end
 
@@ -102,6 +107,7 @@ def test(binary_search_tree_class)
       test_finding_iterative(my_tree)
       test_not_finding_iterative(my_tree)
       test_sorted(my_tree)
+      fail unless my_tree.invariants_held?
     end
     describe "With scratch tree" do
       test_deletes_work(binary_search_tree_class)
