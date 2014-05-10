@@ -1,5 +1,6 @@
 require 'priority_queue'
 require_relative 'dijkstra'
+require_relative 'astar'
 
 module CsRefresh
   # Describes an edge between graph nodes
@@ -45,6 +46,10 @@ module CsRefresh
     # Implement's Djikstra's algorithm
     def shortest_paths
       Dijkstra.new(self).shortest_paths
+    end
+
+    def best_path(goal, optimistic_estimates_to_goal)
+      AStar.new(self, goal, optimistic_estimates_to_goal).best_path
     end
 
     def calc_max_distances

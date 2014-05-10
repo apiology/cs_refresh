@@ -71,6 +71,20 @@ def test_complex_graph(graph_class)
       }
       expect(s.shortest_paths).to eq result
     end
+
+    it "Should do A* search" do
+      optimistic_estimates_to_y = {
+        v => 3,
+        r => 2,
+        s => 2,
+        w => 2,
+        t => 1,
+        x => 1,
+        u => 1,
+        y => 0
+      }
+      expect(s.best_path(y, optimistic_estimates_to_y)).to eq [w, t, x, y]
+    end
   end
 end
 
