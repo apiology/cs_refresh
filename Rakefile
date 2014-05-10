@@ -12,4 +12,5 @@ RSpec::Core::RakeTask.new(:spec) do |task|
 end
 
 desc 'Default: Run specs.'
-task default: [ :spec ]
+task default: [ :spec, :quality ]
+task localtest: [ :default ]
