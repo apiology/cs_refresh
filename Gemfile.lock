@@ -1,6 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    PriorityQueue (0.1.2)
     algorithms (0.6.1)
     ast (2.0.0)
     cane (2.6.2)
@@ -64,6 +65,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  PriorityQueue
   algorithms
   bundler
   quality
