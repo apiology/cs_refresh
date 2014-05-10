@@ -2,12 +2,53 @@
 module CsRefresh
   # My implementation of a binary tree with various traversals.
   class BinaryTree
-    attr_accessor :element, :left, :right
+    attr_accessor :element, :parent
+    attr_reader :left, :right
+
+    def left=(node)
+      # puts "Assigning left of #{element} as #{node.element}"
+      @left.parent = nil unless @left.nil?
+      node.parent = self unless node.nil?
+      @left = node
+    end
+
+    def right=(node)
+      # if node.nil?
+      #   puts "Assigning right of #{element} as nil"
+      # else
+      #   puts "Assigning right of #{element} as #{node.element}"
+      # end
+      @right.parent = nil unless @right.nil?
+      node.parent = self unless node.nil?
+      @right = node
+    end
 
     def initialize(element, left = nil, right = nil)
       @element = element
       @left = left
       @right = right
+    end
+
+    def root
+      ret = if parent.nil?
+              self
+            else
+              parent.root
+            end
+      # puts "Root is #{ret}"
+      ret
+    end
+
+    def simple_paths
+      child_paths(left).concat(child_paths(right))
+    end
+
+    def child_paths(child)
+      if child.nil?
+        [[element]]
+      else
+        child.simple_paths.map { |path| [element].concat(path) }
+      end
     end
 
     def left_to_str(num_indents)
@@ -26,33 +67,41 @@ module CsRefresh
       left_str = left_to_str(num_indents)
       spaces = ''
       num_indents.times { spaces += ' ' }
-      ele_str = "#{spaces}#{element}\n"
+      ele_str = "#{spaces}<treenode: #{element}>\n"
       right_str = right_to_str(num_indents)
       "#{right_str}#{ele_str}#{left_str}"
     end
 
-    def left_rotate!(parent)
+    def left_rotate!
       old_right = right
       old_right_left = right.left
-      parent.replace(self, right)
+      parent.replace(self, right) unless parent.nil?
       old_right.left = self
       @right = old_right_left
     end
 
-    def right_rotate!(parent)
+    def right_rotate!
       old_left = left
       old_left_right = left.right
-      parent.replace(self, left)
+      parent.replace(self, left) unless parent.nil?
       old_left.right = self
       @left = old_left_right
     end
 
     def replace(tree, new_tree)
       if @left == tree
-        @left = new_tree
+        # puts "Left was the tree!"
+        self.left = new_tree
       else
-        @right = new_tree
+        # puts "Right was the tree!"
+        self.right = new_tree
       end
+    end
+
+    def walk(&proc)
+      left.walk(&proc) unless left.nil?
+      yield self
+      right.walk(&proc) unless right.nil?
     end
 
     def dfs_pre_order
