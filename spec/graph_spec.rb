@@ -47,7 +47,7 @@ def test_complex_graph(graph_class)
 
     it "Should do a BFS" do
       max_distances = {
-        v => 2, r=> 1, s=> 0, w=> 1,
+        v => 2, r => 1, s=> 0, w=> 1,
         t => 2, x => 2, u => 3, y => 3
       }
       expect(s.calc_max_distances).to eq max_distances
